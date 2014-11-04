@@ -5,4 +5,14 @@ RSpec.describe Review, :type => :model do
 		review = Review.new(rating:10)
 		expect(review).to have(1).error_on(:rating)
 	end
+
+	it 'is invalid if the rating is less than 1' do
+		review = Review.new(rating:0)
+		expect(review).to have(1).error_on(:rating)
+	end
+
+	it 'is valid if the rating is 1' do
+		review = Review.new(rating:1)
+		expect(review).not_to have(1).error_on(:rating)
+	end
 end
