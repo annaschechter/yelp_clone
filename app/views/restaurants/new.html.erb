@@ -9,9 +9,14 @@
 	</div>
 <% end %>
 
-<%= form_for @restaurant do |f| %>
-	<%= f.label :name %>
-	<%= f.text_field :name %>
-	<%= f.text_field :description %>
-	<%= f.submit %>
+<% if user_signed_in? %>
+	<%= form_for @restaurant do |f| %>
+		<%= f.label :name %>
+		<%= f.text_field :name %>
+		<%= f.text_field :description %>
+		<%= f.submit %>
+	<% end %>
+<% else %>
+	You need to be logged in to add restaurants!
 <% end %>
+
