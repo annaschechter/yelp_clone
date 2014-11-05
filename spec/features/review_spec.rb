@@ -43,4 +43,17 @@ describe 'reviewing' do
 		expect(page).to have_content 'You have already reviewed this restaurant'
 	end
 
+	it 'allows users to delete reviews' do
+		visit '/'
+		click_link 'Delete review'
+		expect(page).to have_content "Review deleted successfully"
+	end
+
+	it 'only allows users to delete their own reviews' do
+		visit '/'
+		click_link 'Sign out'
+		sign_up_add_restaurant("bob", "Pret")
+		expect(page).not_to have_link "Delete review"
+	end
+
 end
