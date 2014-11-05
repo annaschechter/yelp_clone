@@ -1,4 +1,7 @@
 class RestaurantsController < ApplicationController
+
+	# before_action :authenticate_user!, :except => [:index, :show]
+
 	def index
 		@restaurants = Restaurant.all
 	end
@@ -37,8 +40,13 @@ class RestaurantsController < ApplicationController
 
 	def destroy
 		@restaurant = Restaurant.find(params[:id])
-		@restaurant.destroy
-		redirect_to '/restaurants'
-		flash[:notice] = "Restaurant deleted successfully"
+		if @restaurant.user_id == current_user.id
+			@restaurant.destroy
+			redirect_to '/restaurants'
+			flash[:notice] = "Restaurant deleted successfully"
+		else
+			redirect_to '/restaurants'
+			flash[:error] = "You can only delete restaurant if you've created it"
+		end
 	end
 end

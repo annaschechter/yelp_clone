@@ -2,17 +2,24 @@ require 'rails_helper'
 
 describe 'restaurant' do
 
-	def sign_up_add_restaurant
+	def sign_up_add_restaurant(name, rest)
 		visit '/'
 		click_link 'Sign up'
-		fill_in 'Email', with: "anna@example.com"
+		fill_in 'Email', with: name+"@example.com"
 		fill_in 'Password', with: "testtest"
 		fill_in 'Password confirmation', with: 'testtest'
 		click_button 'Sign up'		
 		click_link 'Add restaurant'
-		fill_in 'Name', with: 'KFC'
+		fill_in 'Name', with: rest
 		click_button 'Create Restaurant'
 	end
+
+	# def sign_in(name)
+	# 	visit '/'
+	# 	click_link 'Sign in'
+	# 	fill_in 'Email', with: "#{name}@example.com"
+	# 	fill_in 'Password', with: "testtest"
+	# end
 
 	context 'no restaurants have been added' do
 
@@ -32,7 +39,7 @@ describe 'restaurant' do
 
 	context 'restaurants have been added' do
 		before do 
-			sign_up_add_restaurant
+			sign_up_add_restaurant("anna", "KFC")
 		end
 
 		it 'should display restaurants' do
@@ -44,7 +51,7 @@ describe 'restaurant' do
 
 	context 'viewing restaurants' do
 		before do 
-			sign_up_add_restaurant
+			sign_up_add_restaurant("anna", "KFC")
 		end
 
 		it 'lets a user view a restaurant' do
@@ -59,7 +66,7 @@ describe 'restaurant' do
 	context 'editing restaurants' do
 
 		it 'lets a user edit a restaurant' do
-			sign_up_add_restaurant
+			sign_up_add_restaurant("anna", "KFC")
 			visit '/restaurants'
 			click_link 'Edit KFC'
 			fill_in 'Name', with: 'Kentucky Fried Chicken'
@@ -69,7 +76,7 @@ describe 'restaurant' do
 		end
 
 		it 'only allows users to edit restaurants which they\'ve created' do
-			sign_up_add_restaurant
+			sign_up_add_restaurant("anna", "KFC")
 			click_link 'Sign out'
 			visit '/'
 			click_link 'Edit KFC'
@@ -115,7 +122,7 @@ describe 'restaurant' do
 	describe 'deleting restaurants' do
 
 		before do 
-			sign_up_add_restaurant
+			sign_up_add_restaurant("anna", "KFC")
 		end
 
 		it 'removes a restaurant when a user clicks a delete link' do
@@ -123,6 +130,15 @@ describe 'restaurant' do
 			click_link 'Delete KFC'
 			expect(page).not_to have_content "KFC"
 			expect(page).to have_content 'Restaurant deleted successfully'
+		end
+
+		it 'should only allow removing restaurant if it was created by the current user' do
+			visit '/restaurants'
+			click_link 'Sign out'
+			sign_up_add_restaurant("bob", "Pret")
+			click_link 'Delete KFC'
+			expect(page).not_to have_content 'Restaurant deleted successfully'
+			expect(page).to have_content "You can only delete restaurant if you've created it"
 		end
 
 	end
