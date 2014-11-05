@@ -8,7 +8,11 @@ class RestaurantsController < ApplicationController
 	end
 
 	def create
-		@restaurant = Restaurant.new(params[:restaurant].permit(:name, :description))
+		if current_user
+			@restaurant = Restaurant.new(params[:restaurant].permit(:name, :description))
+			@restaurant.user_id = current_user.id 
+		end
+
 		if @restaurant.save
 			redirect_to restaurants_path
 		else
@@ -22,6 +26,7 @@ class RestaurantsController < ApplicationController
 
 	def edit
 		@restaurant = Restaurant.find(params[:id])
+		@user = User.find(@restaurant.user_id)
 	end
 
 	def update

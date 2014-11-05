@@ -2,7 +2,20 @@ require 'rails_helper'
 
 describe 'restaurant' do
 
+	def sign_up_add_restaurant
+		visit '/'
+		click_link 'Sign up'
+		fill_in 'Email', with: "anna@example.com"
+		fill_in 'Password', with: "testtest"
+		fill_in 'Password confirmation', with: 'testtest'
+		click_button 'Sign up'		
+		click_link 'Add restaurant'
+		fill_in 'Name', with: 'KFC'
+		click_button 'Create Restaurant'
+	end
+
 	context 'no restaurants have been added' do
+
 		it 'should display a prompt to add a restaurant' do
 			visit '/restaurants'
 			expect(page).to have_content 'No restaurants'
@@ -18,8 +31,8 @@ describe 'restaurant' do
 	end
 
 	context 'restaurants have been added' do
-		before do
-			Restaurant.create(name: 'KFC')
+		before do 
+			sign_up_add_restaurant
 		end
 
 		it 'should display restaurants' do
@@ -31,10 +44,11 @@ describe 'restaurant' do
 
 	context 'viewing restaurants' do
 		before do 
-			@kfc = Restaurant.create(name: 'KFC')
+			sign_up_add_restaurant
 		end
 
 		it 'lets a user view a restaurant' do
+			@kfc = Restaurant.find_by name: 'KFC'
 			visit '/restaurants'
 			click_link 'KFC'
 			expect(page).to have_content 'KFC'
@@ -43,26 +57,24 @@ describe 'restaurant' do
 	end
 
 	context 'editing restaurants' do
-		before do 
-			visit '/'
-			click_link 'Sign up'
-			fill_in 'Email', with: "test@example.com"
-			fill_in 'Password', with: "testtest"
-			fill_in 'Password confirmation', with: 'testtest'
-			click_button 'Sign up'
-		end
-
-		before do 
-			Restaurant.create(name: 'KFC')
-		end
 
 		it 'lets a user edit a restaurant' do
+			sign_up_add_restaurant
 			visit '/restaurants'
 			click_link 'Edit KFC'
 			fill_in 'Name', with: 'Kentucky Fried Chicken'
 			click_button 'Update Restaurant'
 			expect(page).to have_content 'Kentucky Fried Chicken'
 			expect(current_path).to eq '/restaurants'
+		end
+
+		it 'only allows users to edit restaurants which they\'ve created' do
+			sign_up_add_restaurant
+			click_link 'Sign out'
+			visit '/'
+			click_link 'Edit KFC'
+			expect(page).not_to have_css 'form'
+			expect(page).to have_content "You cannot edit this restaurant because you did not add it!"
 		end
 	end
 
@@ -103,16 +115,7 @@ describe 'restaurant' do
 	describe 'deleting restaurants' do
 
 		before do 
-			visit '/'
-			click_link 'Sign up'
-			fill_in 'Email', with: "test@example.com"
-			fill_in 'Password', with: "testtest"
-			fill_in 'Password confirmation', with: 'testtest'
-			click_button 'Sign up'
-		end
-
-		before do
-			Restaurant.create(:name => "KFC")
+			sign_up_add_restaurant
 		end
 
 		it 'removes a restaurant when a user clicks a delete link' do
