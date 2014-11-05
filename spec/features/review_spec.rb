@@ -2,11 +2,11 @@ require 'rails_helper'
 
 describe 'reviewing' do
 
-	def leave_review
+	def leave_review(thoughts, rating)
 		visit '/restaurants'
 		click_link 'Review KFC'
-		fill_in "Thoughts", with: "so so "
-		select '3', from: 'Rating'
+		fill_in "Thoughts", with: thoughts
+		select rating, from: 'Rating'
 		click_button 'Leave Review'
 	end
 
@@ -25,7 +25,7 @@ describe 'reviewing' do
 
 	before do
 		sign_up_add_restaurant("anna", "KFC")
-		leave_review
+		leave_review("so so", 3)
 	end
 
 	it 'allows users to leave a review using a form' do
@@ -56,4 +56,11 @@ describe 'reviewing' do
 		expect(page).not_to have_link "Delete review"
 	end
 
+	it 'displays an average rating for all reviews' do
+		leave_review("Great", 5)
+		expect(page).to have_content "Average rating: 4"
+	end
+
 end
+
+

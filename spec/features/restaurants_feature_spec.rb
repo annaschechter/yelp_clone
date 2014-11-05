@@ -14,13 +14,6 @@ describe 'restaurant' do
 		click_button 'Create Restaurant'
 	end
 
-	# def sign_in(name)
-	# 	visit '/'
-	# 	click_link 'Sign in'
-	# 	fill_in 'Email', with: "#{name}@example.com"
-	# 	fill_in 'Password', with: "testtest"
-	# end
-
 	context 'no restaurants have been added' do
 
 		it 'should display a prompt to add a restaurant' do
@@ -143,4 +136,9 @@ describe 'restaurant' do
 
 	end
 
+
 end
+
+
+
+
