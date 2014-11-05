@@ -3,7 +3,6 @@
 
 <% if @restaurants.any? %>
 <% @restaurants.each do |restaurant| %>
-	<h3>Average rating: <%= restaurant.average_rating.to_i %></h3>
 	<%= link_to "#{restaurant.name}", restaurant_path(restaurant) %>
 	<%= link_to "Edit #{restaurant.name}", edit_restaurant_path(restaurant) %>
 	<%= link_to "Delete #{restaurant.name}", restaurant_path(restaurant), method: :delete %>
@@ -13,6 +12,8 @@
 
 			<p>No reviews.</p>
 		<% else %>	
+				<h3>Average rating: <%= restaurant.average_rating.to_i %></h3>
+				<h3><%= star_rating(restaurant.average_rating) %></h3>
 			<h3>Reviews</h3>
 			<ul>
 				<% restaurant.reviews.each do |review| %>

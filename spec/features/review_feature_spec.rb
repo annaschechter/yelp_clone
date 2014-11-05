@@ -61,6 +61,16 @@ describe 'reviewing' do
 		expect(page).to have_content "Average rating: 4"
 	end
 
+
+	it 'displays an average rating for all reviews' do
+		leave_review("so so", 3)
+		click_link 'Sign out'
+		sign_up_add_restaurant("bob", "Pret")
+		leave_review("Great!", 5)
+		expect(page).to have_content "★★★★☆"
+	end
+
+
 end
 
 
