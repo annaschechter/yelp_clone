@@ -1,11 +1,6 @@
 
 <% if @user == current_user %>
-	<%= form_for @restaurant do |f| %>
-		<%= f.label :name %>
-		<%= f.text_field :name %>
-		<%= f.text_field :description %>
-		<%= f.submit %>
-	<% end %>
+	<%= render "form" %>
 <% else %>
 	You cannot edit this restaurant because you did not add it!
 <% end %>
