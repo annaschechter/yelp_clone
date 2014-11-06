@@ -12,7 +12,7 @@ class RestaurantsController < ApplicationController
 
 	def create
 		if current_user
-			@restaurant = Restaurant.new(params[:restaurant].permit(:name, :description))
+			@restaurant = Restaurant.new(params[:restaurant].permit(:name, :description, :image))
 			@restaurant.user_id = current_user.id 
 		end
 

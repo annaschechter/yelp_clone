@@ -46,4 +46,5 @@ gem 'omniauth-facebook'
 gem 'pry-rails', group: :test
 gem 'poltergeist', group: :test
 gem 'database_cleaner', group: :test
+gem 'paperclip'
 
