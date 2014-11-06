@@ -44,4 +44,6 @@ gem 'rspec-collection_matchers', group: :test
 gem 'devise'
 gem 'omniauth-facebook'
 gem 'pry-rails', group: :test
+gem 'poltergeist', group: :test
+gem 'database_cleaner', group: :test
 

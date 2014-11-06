@@ -55,8 +55,10 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
-  resources :restaurants do
-    resources :reviews
+  resources :restaurants, shallow: true do
+    resources :reviews do
+      resources :endorsements 
+    end
   end
 
   root to: "restaurants#index"
@@ -65,4 +67,6 @@ Rails.application.routes.draw do
   devise_scope :user do
     get 'sign_out', :to => 'devise/sessions#destroy', :as => :destroy_user_session_path
   end
+
+
 end
